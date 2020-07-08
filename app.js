@@ -13,7 +13,7 @@ let thank = ["Most welcome","Not an issue","Its my pleasure","Mention not"];
 let closing = ['Ok bye-bye','As you wish, bye take-care','Bye-bye, see you soon..']
 
 //speechRecognition setup
-const speechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 
 function showUserMsg(userMsg) {
@@ -36,38 +36,33 @@ const chatbotResponse = (message) => {
     speech.text = 'This is under development.';
 
     
-    switch (message) {
-        case message.incluses('who are you'):
-            let finalResult = intro[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;
-        case message.incluses('fine'):
-            let finalResult = help[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;    
-        case message.incluses('how are you' || 'how are you doing today'):
-            let finalResult = greetings[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;
-        case message.incluses('tell me somrthing about you' || 'tell me something about your hobbies'):
-            let finalResult = hobbies[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;
-
-        case message.incluses('pizza'):
-            let finalResult = pizza[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;
-        case message.incluses('thank you' || 'thank you so much'):
-            let finalResult = thank[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;
-        case message.incluses('talk to you later' || 'talk to you tomorrow'):
-            let finalResult = closing[Math.floor(Math.random() * intro.length)];
-            speech.text = finalResult;
-            break;             
-        default:
-            break;
+    if(message.includes('who are you')){
+        let finalresult = intro[Math.floor(Math.random() * intro.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('fine')){
+        let finalresult = help[Math.floor(Math.random() * help.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('how are you' || 'how are you doing today')){
+        let finalresult = greetings[Math.floor(Math.random() * greetings.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('tell me something about you' || 'tell me something about your hobbies')){
+        let finalresult = hobbies[Math.floor(Math.random() * hobbies.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('pizza')){
+        let finalresult = pizzas[Math.floor(Math.random() * pizzas.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('thank you' || 'thank you so much')){
+        let finalresult = thank[Math.floor(Math.random() * thank.length)];
+        speech.text = finalresult;
+    }
+    if(message.includes('talk to you' || 'talk')){
+        let finalresult = closing[Math.floor(Math.random() * closing.length)];
+        speech.text = finalresult;
     }
 
     window.speechSynthesis.speak(speech);
@@ -77,11 +72,18 @@ const chatbotResponse = (message) => {
 recognition.onresult=function(e){
     let resultIndex = e.resultIndex;
     let transcript = e.results[resultIndex][0].transcript;
+    chatareamain.appendChild(showUserMsg(transcript));
+    chatbotResponse(transcript);
     console.log(transcript);
     console.log(e);
 }
 
+recognition.onend = () =>{
+    mic.style.background = '#ff3b3b';
+}
+
 mic.addEventListener("click", function(){
+    mic.style.background = '#39c81f';
     recognition.start();
     console.log("Activated");
 })
